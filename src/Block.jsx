@@ -1,14 +1,14 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 export default function Block(props) {
   return (
     <>
-      <>
-        {" "}
-        <div className="name">
+      <div>
+        <div className="name flex">
           <div> City : {props.name}</div>
           <div>{props.weather[0].description}</div>
         </div>
-        <div className="card">
+        <div className="card flex">
           <div className="tem">
             <span className="currTem">
               {(props.main.temp - 273).toFixed(1)}
@@ -52,7 +52,7 @@ export default function Block(props) {
             </div>
           </div>
         </div>
-      </>
+      </div>
       {/* ) : null} */}
     </>
   );

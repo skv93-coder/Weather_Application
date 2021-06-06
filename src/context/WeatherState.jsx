@@ -1,7 +1,7 @@
 import React from "react";
 import WeatherContext from "./weatherContext";
 import reducer from "./weatherReducer";
-import { CURR_CITIES, SEARCH, CLEAR_SEARCH, SORT } from "./types";
+import { CURR_CITIES, SEARCH, CLEAR_SEARCH, SORT, ADD_CITY } from "./types";
 import axios from "axios";
 export default function WeatherSate(props) {
   const intial = {
@@ -29,40 +29,64 @@ export default function WeatherSate(props) {
 
   const [state, dispatch] = React.useReducer(reducer, intial);
 
-  const toggle = async (page) => {
-    const startPage = (page - 1) * 5;
-    const onPage = [];
-    let city = state.cities[startPage].name;
-    let response = await axios.get(
-      `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=896a36af566187c2261cfa42f2582ad2`
-    );
-    let city2 = state.cities[startPage + 1].name;
-    let response2 = await axios.get(
-      `http://api.openweathermap.org/data/2.5/weather?q=${city2}&appid=896a36af566187c2261cfa42f2582ad2`
-    );
-    let city3 = state.cities[startPage + 2].name;
-    let response3 = await axios.get(
-      `http://api.openweathermap.org/data/2.5/weather?q=${city3}&appid=896a36af566187c2261cfa42f2582ad2`
-    );
-    let city4 = state.cities[startPage + 3].name;
-    let response4 = await axios.get(
-      `http://api.openweathermap.org/data/2.5/weather?q=${city4}&appid=896a36af566187c2261cfa42f2582ad2`
-    );
-    let city5 = state.cities[startPage + 4].name;
-    let response5 = await axios.get(
-      `http://api.openweathermap.org/data/2.5/weather?q=${city5}&appid=896a36af566187c2261cfa42f2582ad2`
-    );
-    onPage.push(
-      response.data,
-      response2.data,
-      response3.data,
-      response4.data,
-      response5.data
-    );
+  const addCity = (city) => {
+    axios
+      .get(
+        `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=896a36af566187c2261cfa42f2582ad2`
+      )
+      .then((res) => {
+        let newState = [];
+        for (let i = 0; i < state.cities.length; i++) {
+          newState.push(state.cities[i]);
 
-    dispatch({
-      type: CURR_CITIES,
-      payload: onPage,
+          if (
+            state.currPage?.[0].name.toLowerCase() ===
+            state.cities[i].name.toLowerCase()
+          ) {
+            newState.push({
+              data: null,
+              name: city,
+            });
+          }
+        }
+
+        dispatch({
+          type: ADD_CITY,
+          payload: {
+            cities: newState,
+            currPage: [res?.data, ...state.currPage],
+          },
+        });
+      })
+      .catch(() => {});
+  };
+
+  const toggle = (page, keyword) => {
+    const startPage = (page - 1) * 5;
+
+    const onPage = [];
+    // let city = state.cities[startPage].name;
+    return Promise.all(
+      state.cities
+        ?.filter(
+          (city, idx) => idx >= startPage && city.name.includes(keyword || "")
+        )
+        ?.filter((city, idx) => idx < 5)
+        ?.map((city) => city?.name)
+        ?.map((city) =>
+          axios.get(
+            `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=896a36af566187c2261cfa42f2582ad2`
+          )
+        )
+    ).then((res) => {
+      res.map((city) => {
+        onPage.push(city?.data);
+      });
+
+      dispatch({
+        type: CURR_CITIES,
+        payload: onPage,
+      });
     });
   };
   const handleSearch = async (text) => {
@@ -75,7 +99,6 @@ export default function WeatherSate(props) {
         search.push({ name: state.cities[i].name, data: null });
       }
     }
-    console.log(search);
     const length = search.length;
     let response = "";
     let response2 = "";
@@ -148,7 +171,6 @@ export default function WeatherSate(props) {
       sortOrder[tem[state.currPage[i].name]] = state.currPage[i];
     }
 
-    console.log(sortOrder);
     dispatch({
       type: SORT,
       payload: sortOrder,
@@ -164,8 +186,10 @@ export default function WeatherSate(props) {
         handleSearch: handleSearch,
         clearSearch: clearSearch,
         onSorting: onSorting,
+        addCity,
       }}
     >
+      {/* eslint-disable-next-line react/prop-types*/}
       {props.children}
     </WeatherContext.Provider>
   );

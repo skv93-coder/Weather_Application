@@ -6,6 +6,9 @@
   height: 40vmin;
   pointer-events: none;
 }
+.card{
+      border-bottom: 1px solid white !important;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -43,8 +46,7 @@
   height: 100vh;
 }
 .card,
-.name,
-.search {
+.name{
   padding-left: 10%;
   padding-top: 2%;
   padding-right: 25%;
@@ -69,6 +71,14 @@
 
 .pagination {
   display: inline-block;
+}
+.search{
+  padding-left: 4%;
+  padding-top: 2%;
+  padding-right: 4%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .pagination span {
@@ -97,4 +107,7 @@
   width: 10%;
   background-color: white;
   border-radius: 15px;
+}
+.searchInput{
+outline: none;
 }

@@ -1,0 +1,69 @@
+.add-cities{
+    height: 40px;
+border-radius: 4px; 
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .flex {
+        display: flex;
+    }
+    .card{
+        padding-left: 2.5%;
+        padding-right: 2.5%;
+        line-height: 30px;
+       
+        border-bottom: 1px solid gray;
+    }
+    .AtoZ button{
+        width: 30%;
+        height: 30PX;
+    }
+    .name {
+        padding-right: 4%;
+        padding-left: 4%;
+    }
+    .speed{
+        padding-top: 10px;
+    }
+    .visibility{
+        padding-top: 5px;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .flex{
+        display: flex;
+    }
+    .card {
+        padding-left: 2.5%;
+        padding-right: 2.5%;
+        line-height: 30px;
+       
+        border-bottom: 1px solid gray;
+    }
+    .AtoZ button{
+        width: 30%;
+        height: 30px;
+    }
+    .speed {
+            padding-top: 10px;
+        }
+    .name{
+        padding-right: 4%;
+        padding-left: 4%;
+    }
+    .visibility {
+        padding-top: 5px;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {}
